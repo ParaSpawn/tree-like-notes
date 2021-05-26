@@ -6,9 +6,9 @@ import { createStore } from "redux";
 import { Provider } from "react-redux";
 import reducer from "./redux/reducer.js";
 import axios from "axios";
-import { getAccessToken } from "./TokenManager";
 
-export const axiosInstance = axios.create({});
+export const baseURL = "http://127.0.0.1:8000";
+export const axiosInstance = axios.create({ baseURL: baseURL });
 
 export const store = createStore(reducer);
 

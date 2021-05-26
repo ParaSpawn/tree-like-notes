@@ -6,6 +6,7 @@ import Test from "./components/Test.js";
 import Content from "./components/Content.js";
 import { getAccessToken, setCookie } from "./TokenManager.js";
 import axios from "axios";
+import { baseURL } from "./index.js";
 
 export let authorizedAxiosInstance = null;
 
@@ -16,6 +17,7 @@ function Startup(props) {
         return null;
     } else {
         authorizedAxiosInstance = axios.create({
+            baseURL: baseURL,
             headers: { Authorization: getAccessToken() },
         });
         return <Content />;
