@@ -1,4 +1,4 @@
-import { Component, useState } from "react";
+import { Component } from "react";
 import "antd/dist/antd.css";
 import {
     Button,
@@ -36,6 +36,7 @@ function Logout(props) {
 }
 
 const shortcutInformation = [
+    ["Focus on any node", ["left-click"]],
     ["Focus on parent", ["left"]],
     ["Focus on child", ["right"]],
     ["Focus on next node", ["down"]],
@@ -90,6 +91,14 @@ class Content extends Component {
                 pagination={false}
             />
         );
+        let breadCrumbItems = [];
+        for (let i = 0; i < this.props.breadCrumb.length; i++) {
+            breadCrumbItems.push(
+                <Breadcrumb.Item key={i}>
+                    {this.props.breadCrumb[i]}
+                </Breadcrumb.Item>
+            );
+        }
         return (
             <>
                 <div
@@ -97,9 +106,12 @@ class Content extends Component {
                         display: "flex",
                         flexDirection: "column",
                         boxShadow: "0px 0px 15px 1px grey",
-                        marginBottom: "30px",
                         padding: "15px",
                         paddingTop: "5px",
+                        position: "fixed",
+                        width: "100%",
+                        backgroundColor: "white",
+                        zIndex: 1000,
                     }}
                 >
                     <div
@@ -133,17 +145,23 @@ class Content extends Component {
                             borderRadius: "10px",
                         }}
                     >
-                        {this.props.breadCrumb.map((e) => (
-                            <Breadcrumb.Item>{e}</Breadcrumb.Item>
-                        ))}
+                        {breadCrumbItems}
                     </Breadcrumb>
                 </div>
-                <Content style={{ marginLeft: "20px", marginRight: "20px" }}>
+                <div
+                    style={{
+                        marginLeft: "20px",
+                        marginRight: "20px",
+                        position: "absolute",
+                        top: "140px",
+                        width: "95%",
+                    }}
+                >
                     <Node
                         id={this.props[SD.ROOT_ID]}
                         key={this.props[SD.ROOT_ID]}
                     />
-                </Content>
+                </div>
             </>
         );
     }

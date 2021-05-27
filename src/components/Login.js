@@ -1,12 +1,9 @@
-import { Component, useState, setState } from "react";
+import { useState } from "react";
 import { Form, Input, Button, Card, Alert } from "antd";
 import "antd/dist/antd.css";
 import { useHistory } from "react-router-dom";
-import { URL } from "../index.js";
 import { setToken, getAccessToken } from "../TokenManager.js";
-import { getNodes } from "../redux/actions.js";
 import { axiosInstance } from "../index.js";
-import axios from "axios";
 
 export async function login(username, password) {
     let res = await axiosInstance.post("/user/login/", {
@@ -23,10 +20,10 @@ export default function Login() {
     const history = useHistory();
     const loginFn = async () => {
         try {
-            await login(username, password);
-            history.push("/content");
-        } catch (err) {
-            if (err.response) {
+            const [res, err] = await login(username, password)
+                .then((r) => [r, null])
+                .catch((e) => [null, e]);
+            if (err) {
                 if (err.response.status == 401)
                     setErrorMessage("Incorrect username or password");
                 else
@@ -37,7 +34,11 @@ export default function Login() {
                 setTimeout(() => {
                     setErrorMessage("");
                 }, 4000);
+            } else {
+                history.push("/content");
             }
+        } catch (err) {
+            console.log(err);
         }
     };
 

@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import "antd/dist/antd.css";
 import { Input } from "antd";
 import { CaretRightFilled, CaretDownFilled } from "@ant-design/icons";
@@ -94,8 +94,7 @@ class Node extends Component {
             DELETE_NODE: (e) => {
                 e.preventDefault();
                 if (this.props[ND.PARENT_ID]) {
-                    setFocus(this.props[ND.PARENT_ID]);
-                    deleteNode(this.props[ND.NODE_ID]);
+                    deleteNode(this.props[ND.NODE_ID], this.props[ND.PARENT_ID]);
                 }
             },
             CREATE_NODE: (e) => {

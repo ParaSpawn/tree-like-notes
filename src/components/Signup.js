@@ -1,8 +1,7 @@
-import { Component, useState, setState, getState } from "react";
+import { useState } from "react";
 import { Form, Input, Button, Card, Alert } from "antd";
 import "antd/dist/antd.css";
-import { useHistory } from "react-router";
-import { setToken } from "../TokenManager.js";
+import { useHistory } from "react-router-dom";
 import { getNodes } from "../redux/actions.js";
 import { axiosInstance } from "../index.js";
 import { login } from "./Login.js";
@@ -21,21 +20,28 @@ export default function Signup() {
         } else {
             const data = { username: username, password: password };
             try {
-                let res = await axiosInstance.post("/user/register/", data);
-                await login(username, password);
-                await getNodes(-1, true);
-                history.push("/content");
+                let [res, err] = await axiosInstance
+                    .post("/user/register/", data)
+                    .then((r) => [r, null])
+                    .catch((e) => [null, e]);
+                if (err) {
+                    if (err.response.status == 400)
+                        setErrorMessage(
+                            "Username is taken. Please choose another."
+                        );
+                    else
+                        setErrorMessage(
+                            "Something went wrong. Error code " +
+                                err.response.status
+                        );
+                    setTimeout(() => setErrorMessage(""), 4000);
+                } else {
+                    await login(username, password);
+                    await getNodes(-1, true);
+                    history.push("/content");
+                }
             } catch (err) {
-                if (err.response.status == 400)
-                    setErrorMessage(
-                        "Username is taken. Please choose another."
-                    );
-                else
-                    setErrorMessage(
-                        "Something went wrong. Error code " +
-                            err.response.status
-                    );
-                setTimeout(() => setErrorMessage(""), 4000);
+                console.log(err);
             }
         }
     };

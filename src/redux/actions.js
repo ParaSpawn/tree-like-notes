@@ -3,7 +3,6 @@ import {
     stateDefinition as SD,
     tagsDefinition as TD,
 } from "../definition.js";
-import { get, getAccessToken } from "../TokenManager.js";
 import { store } from "../index.js";
 import { authorizedAxiosInstance } from "../App.js";
 
@@ -151,12 +150,13 @@ export async function moveNode(nodeId, movement) {
     store.dispatch(makeUpdateAction(updatedNodes));
 }
 
-export async function deleteNode(nodeId) {
+export async function deleteNode(nodeId, nextFocus) {
     const updatedNode = (
         await authorizedAxiosInstance.delete(urlPatterns.DELETE + "?id=" + nodeId)
     ).data;
     if (updatedNode !== {}) {
         store.dispatch(makeDeleteAction(nodeId));
         store.dispatch(makeUpdateAction(updatedNode));
+        setFocus(nextFocus)
     }
 }
