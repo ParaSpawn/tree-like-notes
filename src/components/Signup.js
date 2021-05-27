@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Form, Input, Button, Card, Alert } from "antd";
 import "antd/dist/antd.css";
 import { useHistory } from "react-router-dom";
-import { getNodes } from "../redux/actions.js";
 import { axiosInstance } from "../index.js";
 import { login } from "./Login.js";
 
@@ -37,7 +36,6 @@ export default function Signup() {
                     setTimeout(() => setErrorMessage(""), 4000);
                 } else {
                     await login(username, password);
-                    await getNodes(-1, true);
                     history.push("/content");
                 }
             } catch (err) {
